@@ -1,0 +1,93 @@
+---
+title: "Proyecto Final IA R"
+author: "Cristopher Hugo Olivare Del Real"
+date: "10/27/2021"
+output: html_document
+---
+
+# Analisis exploratorio morbilidad 2015 a 2017  
+
+### El objetivo de este documento es demostrar como llevar a cabo un analisis exploratorio utilizando R  
+
+#### El primer paso para llevar a cabo un analisis exploratorio es definir que es lo que queremos hacer con nuestra informacion. En este caso obtendremos informacion sobre los casos registrados de  violencia intrafamiliar en el estado de Chihuahua en mujeres y hombres de 20 a 44 años de edad.  
+
+Cargaremos las librerias que utilizaremos, importaremos el archivo que contiene la data a analizar, en este caso estaremos obteniendo la informacion directamente desde Github utilizando readr y asignaremos la data del url a un objeto creando asi un data frame.  
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+library(readr)
+```
+
+```{r}
+urlfile="https://raw.githubusercontent.com/IA-Center-RStudio/project_ds_r_v2-Cristopherolivares1/main/data/morbilidad_2015_2017.csv?token=AWDXUOIW66URNBPMNRIDCV3BPIVRS"
+```
+
+```{r}
+mydata<-read_csv(url(urlfile))
+```
+
+Inspeccionaremos el objeto que hemos creado para ver el tipo de datos que contiene y confirmar si creamos un data frame exitosamente con el siguiente codigo.
+
+```{r}
+spec(mydata)
+is.data.frame(mydata)
+```
+
+Utilizaremos el siguiente comando para ver nuestro data frame.Podemos observar que hay 13,856 entradas y 97 columnas.
+
+```{r}
+view(mydata)
+```
+
+Con el siguiente codigo reduciremos el tamaño del data frame a tan solo 7 columnas y 433 entradas. Con esto hemos reducido la informacion unicamente. al estado de Chihuahua.
+
+```{r}
+Eda <- subset(mydata, CVE_ESTADO == 8, select = c("DES_ESTADO", "DES_DIAGNO","DE20_A_24","DE25_A_44","DE20_A_24F","DE25_A_44F","PERIODO") )
+view(Eda)
+```
+
+Filtraremos con el siguiente codigo las  morbilidades a analizar creando asi 2 subsets nuevos.
+```{r}
+violencia <- filter(Eda, DES_DIAGNO == "Violencia intrafamiliar")
+depresion <- filter(Eda, DES_DIAGNO == "Depresión")
+```
+
+Crearemos graficas comparativas en relacion a la cifra de casos de violencia intrafamiliar y depresion en hombres y mujeres por año.
+
+```{r}
+ggplot(data = violencia)+ 
+geom_smooth((mapping = aes(x= c(2015,2016,2017),y=DE20_A_24)))
+```
+
+```{r}
+ggplot(data = violencia)+ 
+geom_smooth((mapping = aes(x= c(2015,2016,2017),y=DE20_A_24F)))
+```
+
+```{r}
+ggplot(data = depresion)+ 
+geom_smooth((mapping = aes(x= c(2015,2016,2017),y=DE20_A_24)))
+
+```
+
+```{r}
+ggplot(data = depresion)+ 
+geom_smooth((mapping = aes(x= c(2015,2016,2017),y=DE20_A_24F)))
+```
+
+
+Se han obtenido las graficas con y con estas podemos empezar a hacer comparaciones y buscar si hay una relacion entre el numero de casos de violencia intrafamiliar y depresion.
+
+Podemos ver una alza en cuanto a la depresion en ambos sexos mientras que la violencia intrafamiliar que tuvo un pico en 2016 en varones y ha ido a la baja en mujeres de 20 a 24 años de edad.
+
+Gracias,
+
+
+
+
+
+
+
