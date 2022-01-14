@@ -1,2 +1,2 @@
-# EDARStudioIAcenter
-Exploratory data analysis using R studio for the IA Center certification
+# Project_DS_R
+Data Science project R
